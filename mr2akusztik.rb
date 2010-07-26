@@ -20,7 +20,9 @@ def loadperformers(session_cookie)
   path = '/akusztikplaya/ajax.php?func=loadperformers&divid=akusztik'
   headers = { 'Cookie' => session_cookie }
   resp, data = $http.get(path, headers)
-  return Nokogiri::HTML(data).css(".ak_performer")
+  Nokogiri::HTML(data).css(".ak_performer").each do |perf|
+    puts perf.content
+  end
 end
 
 def loadtracks(session_cookie, performer)
@@ -42,7 +44,7 @@ def get_ssdcode(urlprefix)
   return data[/\{[0-9A-Z-]*\}/]
 end
 
-def download(performer, outfile)
+def download(performer, outfile, dialogness)
   user_agent = "Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/534.1 (KHTML, like Gecko) Chrome/6.0.422.0 Safari/534.1"
   referer = "http://www.mr2.hu/akusztikplaya/player_mp3_js.swf"
 
@@ -60,12 +62,18 @@ def download(performer, outfile)
   }
   Net::HTTP.start(host,port) do |http|
     f = open("#{outfile}", 'wb')
+    tempvar = 0
     http.request_get(path + "?ssdcode=" + ssdcode, headers) do |response|
       size = response['Content-Length']
       pbar = ProgressBar.new("Downloading", size.to_i) 
       response.read_body do |segment|
         f.write(segment)
-        pbar.inc(segment.size.to_i)
+        pbar.inc(segment.size.to_i) if !dialogness
+        if dialogness
+          tempvar += segment.size.to_i
+          # miért nem inkrementálja a pbar.currentet??
+          puts "#{tempvar}/#{size} = #{(tempvar.to_f/size.to_f)*100}%\tpbar.current=#{pbar.current}"
+        end
       end
     end
     f.close
@@ -77,15 +85,16 @@ opt = Getopt::Long.getopts(
       ["--list", "-l", Getopt::BOOLEAN],
       ["--performer", "-p", Getopt::OPTIONAL],
       ["--output", "-o", Getopt::OPTIONAL],
-      ["--help", "-h", Getopt::BOOLEAN]
+      ["--help", "-h", Getopt::BOOLEAN],
+      ["--dialog", "-d", Getopt::BOOLEAN]
 )
 
 if opt["list"]
   session = get_session()
-  puts loadperformers(session)
+  loadperformers(session)
 end
 if opt["performer"]
-  download(opt["performer"], opt["output"] ||= opt["performer"] + ".mp3")
+  download(opt["performer"], opt["output"] ||= opt["performer"] + ".mp3", opt["dialog"])
 end
 if opt["help"] || opt.length == 0
   puts """
