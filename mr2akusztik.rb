@@ -72,7 +72,10 @@ def download(performer, outfile, dialogness)
         if dialogness
           tempvar += segment.size.to_i
           # miért nem inkrementálja a pbar.currentet??
-          puts "#{tempvar}/#{size} = #{(tempvar.to_f/size.to_f)*100}%\tpbar.current=#{pbar.current}"
+          #puts "#{tempvar}/#{size} = #{(tempvar.to_f/size.to_f)*100}%\tpbar.current=#{pbar.current}"
+          # ----- addig is. WORK, AROUND THE WORKAROUND, THE WORK, AROUND THE WORKAROUND
+          # http://www.youtube.com/watch?v=JFwQoqbWgSs&feature=avmsc2
+          puts "#{((tempvar.to_f/size.to_f)*100)}"
         end
       end
     end
