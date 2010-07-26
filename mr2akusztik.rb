@@ -2,7 +2,7 @@ require 'rubygems'
 require 'net/http'
 require 'nokogiri'
 require 'uri'
-
+require 'progressbar'
 require 'pp'
 
 $http = Net::HTTP.new('www.mr2.hu')
@@ -57,14 +57,20 @@ def download(performer)
     'User-agent' => user_agent,
     'Referer'=> referer
   }
-  puts "letöltöm, nemtomhova, nemtommiért."
-  Net::HTTP.start(host,port) { |http|
-    resp = http.get(path + "?ssdcode=" + ssdcode, headers)
-    open("akusztik.mp3", "wb") { |file|
-      file.write(resp.body)
-    }
-  }    
+  Net::HTTP.start(host,port) do |http|
+    f = open("#{ARGV[0]}.mp3", 'wb')
+    http.request_get(path + "?ssdcode=" + ssdcode, headers) do |response|
+      size = response['Content-Length']
+      pbar = ProgressBar.new("Downloading", size.to_i) 
+      response.read_body do |segment|
+        f.write(segment)
+        pbar.inc(segment.size.to_i)
+      end
+    end
+    f.close
+    pbar.finish
+  end
 end
 
 
-download("30Y")
+download(ARGV[0])
