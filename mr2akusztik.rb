@@ -16,7 +16,6 @@ def get_session
 end
 
 def loadperformers(session_cookie)
-  # TODO: valami hasnzálható formában adja vissza
   path = '/akusztikplaya/ajax.php?func=loadperformers&divid=akusztik'
   headers = { 'Cookie' => session_cookie }
   resp, data = $http.get(path, headers)
@@ -89,16 +88,32 @@ opt = Getopt::Long.getopts(
       ["--performer", "-p", Getopt::OPTIONAL],
       ["--output", "-o", Getopt::OPTIONAL],
       ["--help", "-h", Getopt::BOOLEAN],
-      ["--dialog", "-d", Getopt::BOOLEAN]
+      ["--dialog", "-d", Getopt::BOOLEAN],
+      ["--cue", "-c", Getopt::BOOLEAN]
 )
 
 if opt["list"]
   session = get_session()
   loadperformers(session)
 end
-if opt["performer"]
+if opt["performer"] && !opt["cue"]
   download(opt["performer"], opt["output"] ||= opt["performer"] + ".mp3", opt["dialog"])
 end
+
+if opt["performer"] &&opt["cue"]
+  session = get_session()
+  xml = loadtracks(session, opt["performer"])
+  puts "TITLE \"MR2 Akusztik\""
+  puts "PERFORMER \"#{xml.xpath('/Cuelist/Performer/@value')}\""
+  puts "FILE \"#{opt["output"] ||= opt["performer"] + ".mp3" }\" MP3" 
+  xml.css("Cue").each do |track|
+    puts "  TRACK 01 AUDIO"
+    puts "    TITLE \"#{track["name"]}\""
+    puts "    PERFORMER \"#{opt["performer"]}\""
+    puts "    INDEX 01 #{Time.at(track["position"].to_i).gmtime.strftime('%M:%S')}"
+  end
+end
+
 if opt["help"] || opt.length == 0
   puts """
 MR2 Akusztik letöltő
