@@ -6,12 +6,12 @@
 
 ##Parancssorból
 
-  mr2akusztik.rb [-p|--performer ELŐADÓ] [-o|--output KIMENET (opcionális)]
+    mr2akusztik.rb [-p|--performer ELŐADÓ] [-o|--output KIMENET (opcionális)]
 
 ### Egyéb lehetőségek:
 
-  -l, --list      Összes elérhető előadó listázása
-  -h, --help      Ez a szöveg
-  -c, --cue       Cuesheet generálása STDOUT-ra
-  -d, --dialog    Zenity vagy hasonlóhoz használható folyamatkiköpő
+    -l, --list      Összes elérhető előadó listázása
+    -h, --help      Ez a szöveg
+    -c, --cue       Cuesheet generálása STDOUT-ra
+    -d, --dialog    Zenity vagy hasonlóhoz használható folyamatkiköpő
 
