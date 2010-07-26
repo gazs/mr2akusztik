@@ -4,13 +4,14 @@ require 'nokogiri'
 require 'uri'
 require 'progressbar'
 require 'pp'
+require "getopt/long"
 
 $http = Net::HTTP.new('www.mr2.hu')
 
 def get_session
   path = '/index.php'
   resp, data = $http.get(path, nil)
-  cookie = resp.response['set-cookie'].split('; ')[0]
+  cookie = resp.response['set-cookie']
   return cookie
 end
 
@@ -41,7 +42,7 @@ def get_ssdcode(urlprefix)
   return data[/\{[0-9A-Z-]*\}/]
 end
 
-def download(performer)
+def download(performer, outfile)
   user_agent = "Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/534.1 (KHTML, like Gecko) Chrome/6.0.422.0 Safari/534.1"
   referer = "http://www.mr2.hu/akusztikplaya/player_mp3_js.swf"
 
@@ -58,7 +59,7 @@ def download(performer)
     'Referer'=> referer
   }
   Net::HTTP.start(host,port) do |http|
-    f = open("#{ARGV[0]}.mp3", 'wb')
+    f = open("#{outfile}", 'wb')
     http.request_get(path + "?ssdcode=" + ssdcode, headers) do |response|
       size = response['Content-Length']
       pbar = ProgressBar.new("Downloading", size.to_i) 
@@ -72,5 +73,28 @@ def download(performer)
   end
 end
 
+opt = Getopt::Long.getopts(
+      ["--list", "-l", Getopt::BOOLEAN],
+      ["--performer", "-p", Getopt::OPTIONAL],
+      ["--output", "-o", Getopt::OPTIONAL],
+      ["--help", "-h", Getopt::BOOLEAN]
+)
 
-download(ARGV[0])
+if opt["list"]
+  session = get_session()
+  puts loadperformers(session)
+end
+if opt["performer"]
+  download(opt["performer"], opt["output"] ||= opt["performer"] + ".mp3")
+end
+if opt["help"] || opt.length == 0
+  puts """
+MR2 Akusztik letöltő
+
+Használat: mr2akusztik.rb [-p|--performer ELŐADÓ] [-o|--output KIMENET (opcionális)]
+
+Egyéb lehetőségek:
+  -l, --list      Összes elérhető előadó listázása
+  -h, --help      Ez a szöveg
+  """
+end
