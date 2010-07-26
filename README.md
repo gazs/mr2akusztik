@@ -1,12 +1,15 @@
 # MR2 letöltőszkript
 
-Egyszerűen összecsapott, de működő "GUI":
+## Egyszerűen összecsapott, de működő "GUI":
+
   mr2.sh
 
-Parancssorból
+##Parancssorból
+
   mr2akusztik.rb [-p|--performer ELŐADÓ] [-o|--output KIMENET (opcionális)]
 
-Egyéb lehetőségek:
+### Egyéb lehetőségek:
+
   -l, --list      Összes elérhető előadó listázása
   -h, --help      Ez a szöveg
   -c, --cue       Cuesheet generálása STDOUT-ra
