@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'rubygems'
 require 'net/http'
 require 'nokogiri'
@@ -123,5 +124,7 @@ Használat: mr2akusztik.rb [-p|--performer ELŐADÓ] [-o|--output KIMENET (opcio
 Egyéb lehetőségek:
   -l, --list      Összes elérhető előadó listázása
   -h, --help      Ez a szöveg
+  -c, --cue       Cuesheet generálása STDOUT-ra
+  -d, --dialog    Zenity vagy hasonlóhoz használható folyamatkiköpő
   """
 end
