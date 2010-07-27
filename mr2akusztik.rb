@@ -4,7 +4,6 @@ require 'net/http'
 require 'nokogiri'
 require 'uri'
 require 'progressbar'
-require 'pp'
 require "getopt/long"
 
 $http = Net::HTTP.new('www.mr2.hu')
