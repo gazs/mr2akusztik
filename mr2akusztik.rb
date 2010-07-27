@@ -30,10 +30,15 @@ def loadtracks(session_cookie, performer)
   headers = { 'Cookie' => session_cookie }
   resp, data = $http.get(path, headers)
   return Nokogiri::XML(data)
+
+end
+
+def get_albumart(xml)
+  return xml.xpath("Cuelist/PerformerPicture/@value")
 end
 
 def get_urlprefix(xml)
-  xml.xpath("/Cuelist/UrlPrefix/@value").to_s
+  return xml.xpath("/Cuelist/UrlPrefix/@value").to_s
 end
 
 def get_ssdcode(urlprefix)
@@ -50,6 +55,8 @@ def download(performer, outfile, dialogness)
 
   session_cookie = get_session()
   xml = loadtracks(session_cookie,performer)
+
+  puts get_albumart(xml)
   urlprefix = get_urlprefix(xml)
   ssdcode = get_ssdcode(urlprefix)
   
