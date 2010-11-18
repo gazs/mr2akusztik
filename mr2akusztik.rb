@@ -84,9 +84,9 @@ def download(performer, outfile, dialogness)
           puts "#{((tempvar.to_f/size.to_f)*100)}"
         end
       end
+      pbar.finish
     end
     f.close
-    pbar.finish
   end
 end
 
