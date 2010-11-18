@@ -113,8 +113,10 @@ if opt["performer"] &&opt["cue"]
   puts "TITLE \"MR2 Akusztik\""
   puts "PERFORMER \"#{xml.xpath('/Cuelist/Performer/@value')}\""
   puts "FILE \"#{opt["output"] ||= opt["performer"] + ".mp3" }\" MP3" 
+  tracknum = 0
   xml.css("Cue").each do |track|
-    puts "  TRACK 01 AUDIO"
+	tracknum += 1
+    puts "  TRACK #{"%02d" % tracknum} AUDIO"
     puts "    TITLE \"#{track["name"]}\""
     puts "    PERFORMER \"#{opt["performer"]}\""
     puts "    INDEX 01 #{Time.at(track["position"].to_i).gmtime.strftime('%M:%S')}"
