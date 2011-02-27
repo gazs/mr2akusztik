@@ -2,6 +2,11 @@
 
 _Kérlek, csak magáncélra, és főleg semmi gonosz dologra ne használd ezt az eszközt. Szeretném, ha a Rádió továbbra is megosztaná a kincseit velünk, s ugye te is?_
 
+## Ruby 1.9.2-vel
+
+Nem jó a default Getopt gem, ezen a forkon ki van javítva  hiba, használd ezt: https://github.com/shurizzle/getopt/
+
+
 ## Egyszerűen összecsapott, de működő "GUI":
 
 Zenity felhasználásával

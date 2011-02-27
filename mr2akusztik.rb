@@ -11,7 +11,7 @@ $http = Net::HTTP.new('www.mr2.hu')
 
 def get_session
   path = '/index.php'
-  resp, data = $http.get(path, nil)
+  resp, data = $http.get(path)
   cookie = resp.response['set-cookie']
   return cookie
 end
@@ -45,7 +45,7 @@ def get_ssdcode(urlprefix)
   scheme, userinfo, host, port, registry, path, opaque, query, fragment = URI.split(urlprefix)
   http = Net::HTTP.new(host,port)
   url =  path + ".mp3.js?hashid=" + (Time.now.to_i * 1000).to_s
-  resp, data = http.get(url, nil)
+  resp, data = http.get(url)
   return data[/\{[0-9A-Z-]*\}/]
 end
 
