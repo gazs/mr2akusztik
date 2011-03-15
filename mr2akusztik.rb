@@ -44,7 +44,7 @@ def get_ssdcode(urlprefix)
   http = Net::HTTP.new(host,port)
   url =  path + ".mp3.js?hashid=" + (Time.now.to_i * 1000).to_s
   resp, data = http.get(url)
-  return data[/\{[0-9A-Z-]*\}/]
+  data[/\{[0-9A-Z-]*\}/]
 end
 
 def download(performer, outfile, dialogness)
