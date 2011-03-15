@@ -4,6 +4,7 @@ require 'rubygems'
 require 'net/http'
 require 'nokogiri'
 require 'uri'
+require 'iconv'
 require 'progressbar'
 require "getopt/long"
 
@@ -19,7 +20,7 @@ def loadperformers(session_cookie)
   path = '/akusztikplaya/ajax.php?func=loadperformers&divid=akusztik'
   headers = { 'Cookie' => session_cookie }
   resp, data = $http.get(path, headers)
-  Nokogiri::HTML(data).css(".ak_performer").each do |perf|
+  Nokogiri::HTML.parse(data, nil, 'iso-8859-2').css(".ak_performer").each do |perf|
     puts perf.content
   end
 end
