@@ -10,10 +10,9 @@ require "getopt/long"
 $http = Net::HTTP.new('www.mr2.hu')
 
 def get_session
-  path = '/index.php'
+  path = '/splash.php?reload=L2luZGV4LnBocA==' # március 15 splash fix. FIXME: lehet el fog törni később!
   resp, data = $http.get(path)
-  cookie = resp.response['set-cookie']
-  return cookie
+  resp.response['set-cookie']
 end
 
 def loadperformers(session_cookie)
@@ -29,16 +28,15 @@ def loadtracks(session_cookie, performer)
   path = '/akusztikplaya/ajax.php?func=loadtracks&perf=' + URI.escape(performer)
   headers = { 'Cookie' => session_cookie }
   resp, data = $http.get(path, headers)
-  return Nokogiri::XML(data)
-
+  Nokogiri::XML(data)
 end
 
 def get_albumart(xml)
-  return xml.xpath("Cuelist/PerformerPicture/@value")
+  xml.xpath("Cuelist/PerformerPicture/@value")
 end
 
 def get_urlprefix(xml)
-  return xml.xpath("/Cuelist/UrlPrefix/@value").to_s
+  xml.xpath("/Cuelist/UrlPrefix/@value").to_s
 end
 
 def get_ssdcode(urlprefix)
@@ -102,6 +100,7 @@ opt = Getopt::Long.getopts(
 
 if opt["list"]
   session = get_session()
+  puts "session: #{session}"
   loadperformers(session)
 end
 if opt["performer"] && !opt["cue"]
