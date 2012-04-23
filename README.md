@@ -2,6 +2,11 @@
 
 _Kérlek, csak magáncélra, és főleg semmi gonosz dologra ne használd ezt az eszközt. Szeretném, ha a Rádió továbbra is megosztaná a kincseit velünk, s ugye te is?_
 
+## Mi ez a Pythonos cucc?
+
+Ez a jövő. A rubysat már nem értem mit hánytam össze 1+ éve, nem tudom összehozni a függőségeket hogy elinduljon a jelenlegi gépemen, etc, úgyhogy dobnék rá egy atomot ha nem bánjátok. Az újat azért Pythonban írom, mert közben abba az irányba terelődött a pályám, hogy ezt a nyelvet jobban megtanultam, mint a Rubyt valaha is tudtam kezelni (lásd mellékelt ábra).
+
+
 ## Ruby 1.9.2-vel
 
 Nem jó a default Getopt gem, ezen a forkon ki van javítva  hiba, használd ezt: https://github.com/shurizzle/getopt/
